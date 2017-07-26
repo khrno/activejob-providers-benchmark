@@ -1,0 +1,27 @@
+<div class="demo-template">
+  <h1>Greetings [<%= @greetings.count %>]</h1>
+
+  <% if @greetings.count > 0 %>
+
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Provider</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @greetings.each do |greeting| %>
+            <tr>
+              <td><%= greeting.name %></td>
+              <td><%= greeting.queue_provider %></td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+  <% else %>
+      <div class="alert alert-warning demo-alert" role="alert">
+        There are no greeting records.
+      </div>
+  <% end %>
+</div>

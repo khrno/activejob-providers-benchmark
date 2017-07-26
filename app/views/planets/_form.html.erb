@@ -1,0 +1,6 @@
+<%= simple_form_for @planet do |f| %>
+  <%= f.input :name, label: 'Name', error: 'Name is mandatory, please register one' %>
+  <%= f.input :distance, hint: 'Distance in kms.' %>
+  <%= f.input :habitable, inline_label: 'Planet is habitable' %>
+  <%= f.button :submit %>
+<% end %>

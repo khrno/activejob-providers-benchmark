@@ -1,0 +1,12 @@
+QUEUE_PROVIDER: 'sidekiq' # or shoryuken
+
+# AWS for shoryuken SQS configuration
+AWS_REGION: ''
+AWS_ACCESS_KEY_ID: ''
+AWS_SECRET_ACCESS_KEY: ''
+
+# Sidekiq configuration
+REDIS_HOST: 'localhost'
+REDIS_PORT: '6379'
+SIDEKIQ_NAMESPACE: 'demo'
+

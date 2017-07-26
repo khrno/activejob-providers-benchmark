@@ -1,0 +1,14 @@
+<div class="demo-template demo-center">
+  <h1>Send Messages to Queue</h1>
+  <div class="row">
+    <div class="col-sm-4 col-sm-offset-4 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">
+      <div clasS="col-sm-6 col-md-6 col-lg-6 top-space">
+        <%= button_to 'Send Now', send_job_now_path, method: :post, class: 'btn btn-primary', remote: true %>
+      </div>
+      <div clasS="col-sm-6 col-md-6 col-lg-6 top-space">
+        <%= button_to 'Send Later', send_job_later_path, method: :post, class: 'btn btn-info', remote: true %>
+      </div>
+    </div>
+
+  </div>
+</div>
