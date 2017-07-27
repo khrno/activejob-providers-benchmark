@@ -20,12 +20,4 @@ ActiveRecord::Schema.define(version: 20170726202752) do
     t.datetime "updated_at",                 null: false
   end
 
-  create_table "planets", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.integer  "distance",   limit: 4
-    t.boolean  "habitable",              default: false
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
-  end
-
 end
