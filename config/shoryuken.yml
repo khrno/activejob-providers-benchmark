@@ -1,0 +1,4 @@
+queues:
+  - [low-demo-queue, 1]
+  - [default-demo-queue  , 5]
+  - [critical-demo-queue, 10]
