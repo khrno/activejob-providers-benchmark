@@ -43,3 +43,4 @@ test/dummy/tmp/
 **/spec_helper.rb
 **/rails_helper.rb
 base/app/assets/javascripts/i18n/translations.js
+config/application.yml
