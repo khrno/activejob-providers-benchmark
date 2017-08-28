@@ -24,7 +24,11 @@ In this project you just to configure:
     ```bash
     $ bundle install
     ```
-
+3. Create the database
+    ```bash
+    $ bundle exec rake db:create
+    ```
+    
 4. Run migrations
     ```bash
     $ bundle exec rake db:migrate
