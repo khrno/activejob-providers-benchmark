@@ -24,17 +24,17 @@ In this project you just to configure:
     ```bash
     $ bundle install
     ```
-3. Create the database
-    ```bash
+4. Create the database
+    ```bash
     $ bundle exec rake db:create
-    ```
+    ```
     
-4. Run migrations
+5. Run migrations
     ```bash
     $ bundle exec rake db:migrate
     ```
     
-5. Start the server
+6. Start the server
     ```bash
     $ bundle exec rails s
     ```
