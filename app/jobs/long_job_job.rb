@@ -1,5 +1,5 @@
-class LongJobJob < ActiveJob::Base
-  queue_as 'critical-demo-queue'
+class LongJobJob < ApplicationWorker
+  queue_as 'critical'
 
   def perform(title)
     tstart = Time.zone.now

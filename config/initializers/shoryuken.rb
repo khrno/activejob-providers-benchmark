@@ -2,8 +2,10 @@ require 'aws-sdk'
 require 'uri'
 
 if ENV['QUEUE_PROVIDER'].to_sym == :shoryuken
-  queue_prefix = Rails.env
-  queues = %w(critical-demo-queue default-demo-queue low-demo-queue)
+  Shoryuken.active_job_queue_name_prefixing = true
+
+  queue_prefix = ENV['PLATFORM_UUID']
+  queues = %w(critical default low)
   client =  Aws::SQS::Client.new(
     region: ENV['AWS_REGION'],
     credentials: Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'])
