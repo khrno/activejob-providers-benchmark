@@ -1,24 +1,41 @@
 require 'aws-sdk'
 require 'uri'
 
-if ENV['QUEUE_PROVIDER'].to_sym == :shoryuken
+if ENV['QUEUE_PROVIDER'] && ENV['QUEUE_PROVIDER'].to_sym == :shoryuken
   Shoryuken.active_job_queue_name_prefixing = true
 
   queue_prefix = ENV['PLATFORM_UUID']
-  queues = %w(critical default low)
-  client =  Aws::SQS::Client.new(
-    region: ENV['AWS_REGION'],
-    credentials: Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'])
-  )
-
-  aws_queues_names = client.list_queues.queue_urls.map{|queue_url| URI(queue_url).path.split('/').last}
-
-  queues.each do |queue_name|
-    queue_full_name = ENV['USE_PREFIX_QUEUE'] == 'true' ? "#{queue_prefix}_#{queue_name}" : queue_name
-    unless aws_queues_names.include? queue_full_name
+  client =  Aws::SQS::Client.new
+  aws_name_url = client.list_queues.queue_urls
+                   .map { |queue_url| { queue_url[URI(queue_url).path.split('/').last] => queue_url[queue_url] } }
+                   .reduce({}, :merge)
+  Shoryuken.options[:queues].each do |queue_name|
+    attributes = {}
+    # queue_name[0] name of queue in queues parameters
+    # queue_name[1] round robin weight of queue in queues parameters
+    # queue_name[2] attributes of queue in queues parameters. Format: {options: {VisibilityTimeout: '123'}}
+    if queue_name[2]&.[](:options)&.[](:VisibilityTimeout)
+      attributes[:VisibilityTimeout] = queue_name[2][:options][:VisibilityTimeout]
+    else
+      case queue_name[0].split('_').last
+        when 'low'
+          attributes[:VisibilityTimeout] = '14400'
+        when 'default'
+          attributes[:VisibilityTimeout] = '3600'
+        when 'critical'
+          attributes[:VisibilityTimeout] = '900'
+        else
+          attributes[:VisibilityTimeout] = '30'
+      end
+    end
+    queue_full_name = queue_prefix ? "#{queue_prefix}_#{queue_name[0]}" : queue_name[0]
+    if aws_name_url[queue_full_name]
+      puts "[SHORYUKEN] Notice: Updating queue #{queue_full_name } on AWS SQS"
+      client.set_queue_attributes({ queue_url: aws_name_url[queue_full_name], attributes: attributes })
+    else
       puts "[SHORYUKEN] Notice: Creating queue #{queue_full_name } on AWS SQS"
-      client.create_queue({queue_name: queue_full_name})
+      client.create_queue({ queue_name: queue_full_name, attributes: attributes })
     end
   end
-end
 
+end

@@ -23,7 +23,7 @@ module Demo
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
     config.active_job.queue_adapter = ENV['QUEUE_PROVIDER'].to_sym
-    config.active_job.queue_name_prefix = ENV['PLATFORM_UUID']
+    config.active_job.queue_name_prefix = ENV['PLATFORM_UUID'] if config.active_job.queue_adapter == :shoryuken
     config.time_zone = 'Santiago'
   end
 end
