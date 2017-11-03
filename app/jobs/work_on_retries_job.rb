@@ -1,7 +1,7 @@
 class WorkOnRetriesJob < ApplicationWorker
-  queue_as 'default'
+  queue_as 'smallest'
 
-  retry_on(StandardError,1.seconds, 5, 'default-demo-queue') do |job, exception|
+  retry_on(StandardError,3.seconds, 5, 'smallest') do |job, _|
     Greeting.create(name: "Work with value: #{job.arguments[0]} was killed by retries with #{job.executions} executions", queue_provider: ENV['QUEUE_PROVIDER'])
   end
 

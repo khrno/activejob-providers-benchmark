@@ -1,4 +1,5 @@
 queues:
-  - [low, 1]
-  - [default, 5]
-  - [critical, 10]
+  - [smallest, 1]
+  - [low, 5]
+  - [default, 10]
+  - [critical, 50]

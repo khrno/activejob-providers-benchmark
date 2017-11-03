@@ -21,13 +21,28 @@ if ENV['QUEUE_PROVIDER'] && ENV['QUEUE_PROVIDER'].to_sym == :shoryuken
         when 'low'
           attributes[:VisibilityTimeout] = '14400'
         when 'default'
-          attributes[:VisibilityTimeout] = '3600'
+          attributes[:VisibilityTimeout] = '30'
         when 'critical'
           attributes[:VisibilityTimeout] = '900'
+        when 'smallest'
+          attributes[:VisibilityTimeout] = '1'
         else
           attributes[:VisibilityTimeout] = '30'
       end
     end
+
+    if queue_name[2]&.[](:options)&.[](:maxReceiveCount)
+      attributes[:RedrivePolicy] = {
+        'deadLetterTargetArn': 'arn:aws:sqs:us-east-1:745925809396:dead-letter-queue',
+        'maxReceiveCount': queue_name[2]&.[](:options)&.[](:maxReceiveCount)}.to_json
+    else
+      attributes[:RedrivePolicy] = {
+        'deadLetterTargetArn': 'arn:aws:sqs:us-east-1:745925809396:dead-letter-queue',
+        'maxReceiveCount': '5'}.to_json
+    end
+
+
+
     queue_full_name = queue_prefix ? "#{queue_prefix}_#{queue_name[0]}" : queue_name[0]
     if aws_name_url[queue_full_name]
       puts "[SHORYUKEN] Notice: Updating queue #{queue_full_name } on AWS SQS"
