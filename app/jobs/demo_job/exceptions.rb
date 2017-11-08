@@ -25,6 +25,7 @@ module DemoJob
 
     module ClassMethods
       def retry_on(exception, wait, attempts, queue)
+        Rails.logger.warn "[ACTIVEJOB] directive retry_on must be in a queue with a redrive policy of 1"
         rescue_from exception do |error|
           if executions < attempts
             logger.error "Retrying #{self.class} in #{wait} seconds, due to a #{exception}. The original exception was #{error.cause.inspect}."
