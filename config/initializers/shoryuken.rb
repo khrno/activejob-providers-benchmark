@@ -25,7 +25,7 @@ if ENV['QUEUE_PROVIDER'] && ENV['QUEUE_PROVIDER'].to_sym == :shoryuken
         when 'critical'
           attributes[:VisibilityTimeout] = '900'
         when 'smallest'
-          attributes[:VisibilityTimeout] = '1'
+          attributes[:VisibilityTimeout] = '10'
         else
           attributes[:VisibilityTimeout] = '30'
       end
@@ -33,11 +33,11 @@ if ENV['QUEUE_PROVIDER'] && ENV['QUEUE_PROVIDER'].to_sym == :shoryuken
 
     if queue_name[2]&.[](:options)&.[](:maxReceiveCount)
       attributes[:RedrivePolicy] = {
-        'deadLetterTargetArn': 'arn:aws:sqs:us-east-1:745925809396:dead-letter-queue',
+        'deadLetterTargetArn': 'arn:aws:sqs:us-east-1:767679137486:dlq',
         'maxReceiveCount': queue_name[2]&.[](:options)&.[](:maxReceiveCount)}.to_json
     else
       attributes[:RedrivePolicy] = {
-        'deadLetterTargetArn': 'arn:aws:sqs:us-east-1:745925809396:dead-letter-queue',
+        'deadLetterTargetArn': 'arn:aws:sqs:us-east-1:767679137486:dlq',
         'maxReceiveCount': '5'}.to_json
     end
 
